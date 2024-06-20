@@ -175,7 +175,14 @@ def run_simulation():
     )
 
     plot = LivePlottingApp(width=1200, mod=1)
-    plot.set_names(["rightrightleg", "rightleg", "leftleg", "leftleftleg"])
+    plot.set_names(
+        [
+            "leftshuttle.position",
+            "leftshuttle.motor_torque",
+            "rightshuttle.position",
+            "rightshuttle.motor_torque",
+        ]
+    )
     plot.set_colors([(0, 0, 255), (255, 0, 0), (0, 255, 0), (255, 0, 255)])
 
     dt = 1.0 / frame_rate
@@ -209,7 +216,7 @@ def run_simulation():
             tars_id,
             joints["rightleg"].index,
             controlMode=pb.VELOCITY_CONTROL,
-            targetVelocity=kp * (set_point - joints_state["rightleg"].position),
+            targetVelocity=kp * (0 - joints_state["rightleg"].position),
         )
         pb.setJointMotorControl2(
             tars_id,
@@ -224,7 +231,41 @@ def run_simulation():
             targetVelocity=kp * (set_point - joints_state["leftleftleg"].position),
         )
 
-        plot.feed(joints_state[name].position for name in plot.names)
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightrightshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=10,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftleftshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+
+        plot.feed(
+            [
+                joints_state["leftleftshuttle"].motor_torque,
+                joints_state["leftshuttle"].motor_torque,
+                joints_state["rightshuttle"].motor_torque,
+                joints_state["rightrightshuttle"].motor_torque,
+            ]
+        )
+
+        # plot.feed(joints_state[name].position for name in plot.names)
         plot.clock.tick(frame_rate)
 
     time.sleep(5)

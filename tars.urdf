@@ -175,7 +175,7 @@
 		<child link="rightrightshuttle" />
 		<origin xyz="0 -0.1674 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="rightshuttle" type="continuous">
@@ -183,7 +183,7 @@
 		<child link="rightshuttle" />
 		<origin xyz="0 -0.0558 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="leftshuttle" type="continuous">
@@ -191,7 +191,7 @@
 		<child link="leftshuttle" />
 		<origin xyz="0 0.0558 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="leftleftshuttle" type="continuous">
@@ -199,7 +199,7 @@
 		<child link="leftleftshuttle" />
 		<origin xyz="0 0.1674 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 
