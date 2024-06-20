@@ -4,9 +4,10 @@
 
 	<link name="spine">
 		<visual>
-			<origin xyz="0 0 0" rpy="0 0 0" />
+			<origin xyz="0 0 0" rpy="1.570 0 0" />
 			<geometry>
-				<cylinder radius="0.005" length=" 0.4364" />
+				<box size="0.05 0.05 .7" />
+				<!-- <cylinder radius="0.005" length=" 0.4364" /> -->
 			</geometry>
 			<material name="BlueGray">
 				<color rgba="0.3 0.3 0.6 1.0" />
@@ -22,7 +23,7 @@
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-				<box size="0.1 0.1 0.1" />
+				<box size="0.12 0.12 0.12" />
 			</geometry>
 			<material name="RedGray">
 				<color rgba="0.6 0.3 0.3 1.0" />
@@ -59,7 +60,7 @@
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-				<box size="0.1 0.1 0.1" />
+				<box size="0.12 0.12 0.12" />
 			</geometry>
 			<material name="RedGray">
 				<color rgba="0.6 0.3 0.3 1.0" />
@@ -96,7 +97,7 @@
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-				<box size="0.1 0.1 0.1" />
+				<box size="0.12 0.12 0.12" />
 			</geometry>
 			<material name="RedGray">
 				<color rgba="0.6 0.3 0.3 1.0" />
@@ -133,7 +134,7 @@
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-				<box size="0.1 0.1 0.1" />
+				<box size="0.12 0.12 0.12" />
 			</geometry>
 			<material name="RedGray">
 				<color rgba="0.6 0.3 0.3 1.0" />
@@ -174,7 +175,7 @@
 		<child link="rightrightshuttle" />
 		<origin xyz="0 -0.1674 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="rightshuttle" type="continuous">
@@ -182,7 +183,7 @@
 		<child link="rightshuttle" />
 		<origin xyz="0 -0.0558 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="leftshuttle" type="continuous">
@@ -190,7 +191,7 @@
 		<child link="leftshuttle" />
 		<origin xyz="0 0.0558 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 	<joint name="leftleftshuttle" type="continuous">
@@ -198,7 +199,7 @@
 		<child link="leftleftshuttle" />
 		<origin xyz="0 0.1674 0" rpy="0 0 0" />
 		<axis xyz="0 1 0" />
-		<limit effort="10000" velocity="1" />
+		<limit effort="10000" velocity="10" />
 	</joint>
 
 

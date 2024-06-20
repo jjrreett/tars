@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Tuple
 import numpy as np
 
+
 @dataclass
 class JointInfo:
     index: int
@@ -51,6 +52,7 @@ class JointInfo:
             parent_index=data[16],
         )
 
+
 @dataclass
 class JointState:
     position: float
@@ -67,10 +69,9 @@ class JointState:
             motor_torque=data[3],
         )
 
+
 def clamp(x, high, low):
     return min(max(x, low), high)
-
-
 
 
 from plot import LivePlottingApp
@@ -103,7 +104,7 @@ from plot import LivePlottingApp
 #             joint_states = pb.getJointStates(tars_id, control_vector_indicies)
 #             joints_state: dict[str, JointState] = {joints_inv[joint_index]: JointState.from_tuple(joint_state) for joint_index, joint_state in zip(control_vector_indicies, joint_states)}
 #             plot.feed(joints_state[name].motor_torque for name in plot.names)
-        
+
 
 # finally:
 #     pb.disconnect()
@@ -113,6 +114,7 @@ from plot import LivePlottingApp
 
 
 frame_rate = 240.0
+
 
 def run_simulation():
     here = Path(__file__)
@@ -131,19 +133,15 @@ def run_simulation():
         joint_info = JointInfo.from_tuple(pb.getJointInfo(tars_id, i))
         joints[joint_info.name] = joint_info
 
-    joints_inv = {
-        joints[name].index: name for name in joints
-    }
+    joints_inv = {joints[name].index: name for name in joints}
 
     rich.print(joints)
-
-
 
     leg_control_vector_indicies = [
         joints["rightrightleg"].index,
         joints["rightleg"].index,
+        joints["leftleg"].index,
         joints["leftleftleg"].index,
-        joints["rightrightleg"].index,
     ]
 
     shuttle_control_vector_indicies = [
@@ -152,63 +150,128 @@ def run_simulation():
         joints["leftshuttle"].index,
         joints["leftleftshuttle"].index,
     ]
-    control_vector_indicies = leg_control_vector_indicies + shuttle_control_vector_indicies
+    control_vector_indicies = (
+        leg_control_vector_indicies + shuttle_control_vector_indicies
+    )
 
     # pb.resetSimulation()
     # plane_id = pb.loadURDF(str(pybullet_data_path / "plane.urdf"))
     # tars_id = pb.loadURDF(str(parent / "tars.urdf"), start_pos, start_orientation)
     pb.setGravity(0, 0, -10)
     # initial control
-    pb.setJointMotorControlArray(tars_id, leg_control_vector_indicies, controlMode=pb.VELOCITY_CONTROL, targetVelocities=[0.0]*len(leg_control_vector_indicies), velocityGains=[1]*len(leg_control_vector_indicies))
-    pb.setJointMotorControlArray(tars_id, shuttle_control_vector_indicies, controlMode=pb.VELOCITY_CONTROL, targetVelocities=[0.0]*len(shuttle_control_vector_indicies), velocityGains=[1]*len(shuttle_control_vector_indicies))
-    
+    pb.setJointMotorControlArray(
+        tars_id,
+        leg_control_vector_indicies,
+        controlMode=pb.VELOCITY_CONTROL,
+        targetVelocities=[0.0] * len(leg_control_vector_indicies),
+        velocityGains=[1] * len(leg_control_vector_indicies),
+    )
+    pb.setJointMotorControlArray(
+        tars_id,
+        shuttle_control_vector_indicies,
+        controlMode=pb.VELOCITY_CONTROL,
+        targetVelocities=[0.0] * len(shuttle_control_vector_indicies),
+        velocityGains=[1] * len(shuttle_control_vector_indicies),
+    )
+
     plot = LivePlottingApp(width=1200, mod=1)
-    plot.set_names(["rightleg", "rightshuttle"])
-    plot.set_colors([(0, 0, 255), (255, 0, 0)])   
+    plot.set_names(
+        [
+            "leftshuttle.position",
+            "leftshuttle.motor_torque",
+            "rightshuttle.position",
+            "rightshuttle.motor_torque",
+        ]
+    )
+    plot.set_colors([(0, 0, 255), (255, 0, 0), (0, 255, 0), (255, 0, 255)])
 
     dt = 1.0 / frame_rate
     total_time = 5
+
+    set_point = -0.1
+    kp = 1
+
     # Simulation setup code here
     for t in np.arange(0, total_time, dt):
         pb.stepSimulation()
-        
-        # Simulation code here
-        pb.setJointMotorControl2(tars_id, joints["rightleg"].index, controlMode=pb.VELOCITY_CONTROL, targetVelocity=clamp(-t+1, .1, 0))
 
         # Send data to plotting process
         joint_states = pb.getJointStates(tars_id, control_vector_indicies)
-        joints_state = {joints_inv[joint_index]: JointState.from_tuple(joint_state) for joint_index, joint_state in zip(control_vector_indicies, joint_states)}
-        
-        plot.feed(joints_state[name].motor_torque for name in plot.names)
+        joints_state = {
+            joints_inv[joint_index]: JointState.from_tuple(joint_state)
+            for joint_index, joint_state in zip(control_vector_indicies, joint_states)
+        }
+
+        if t == 0.0:
+            rich.print(joints_state)
+
+        # Simulation code here
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightrightleg"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=kp * (set_point - joints_state["rightrightleg"].position),
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightleg"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=kp * (0 - joints_state["rightleg"].position),
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftleg"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=kp * (0 - joints_state["leftleg"].position),
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftleftleg"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=kp * (set_point - joints_state["leftleftleg"].position),
+        )
+
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightrightshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["rightshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=10,
+        )
+        pb.setJointMotorControl2(
+            tars_id,
+            joints["leftleftshuttle"].index,
+            controlMode=pb.VELOCITY_CONTROL,
+            targetVelocity=0,
+        )
+
+        plot.feed(
+            [
+                joints_state["leftleftshuttle"].motor_torque,
+                joints_state["leftshuttle"].motor_torque,
+                joints_state["rightshuttle"].motor_torque,
+                joints_state["rightrightshuttle"].motor_torque,
+            ]
+        )
+
+        # plot.feed(joints_state[name].position for name in plot.names)
         plot.clock.tick(frame_rate)
 
+    time.sleep(5)
     pb.disconnect()
     plot.close()
 
-# def run_plotting(queue):
-#     plot = LivePlottingApp(width=1200, mod=1)
-#     plot.set_names(["rightleg", "rightshuttle"])
-#     plot.set_colors([(0, 0, 255), (255, 0, 0)])
-    
-#     while True:
-#         joints_state = queue.get()
-#         if joints_state is None:  # Check for the end signal
-#             break
-#         plot.feed(joints_state[name].motor_torque for name in plot.names)
-#         plot.clock.tick(frame_rate)
-#     plot.close()
-
-# import multiprocessing
-
 
 if __name__ == "__main__":
-#     queue = multiprocessing.Queue()
-#     sim_process = multiprocessing.Process(target=run_simulation, args=(queue,))
-#     plot_process = multiprocessing.Process(target=run_plotting, args=(queue,))
-    
-#     sim_process.start()
-#     plot_process.start()
-    
-#     sim_process.join()
-#     plot_process.join()
     run_simulation()
