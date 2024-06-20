@@ -1,0 +1,5 @@
+numpy
+pybullet
+pygame
+rich
+ruff

@@ -1,0 +1,237 @@
+<robot name="tars">
+
+	<!-- * * * Link Definitions * * * -->
+
+	<link name="spine">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<cylinder radius="0.005" length=" 0.4364" />
+			</geometry>
+			<material name="BlueGray">
+				<color rgba="0.3 0.3 0.6 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="rightrightshuttle">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1" />
+			</geometry>
+			<material name="RedGray">
+				<color rgba="0.6 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="rightrightleg">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+			<material name="Gray">
+				<color rgba="0.3 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+		</collision>
+	</link>
+
+	<link name="rightshuttle">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1" />
+			</geometry>
+			<material name="RedGray">
+				<color rgba="0.6 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="rightleg">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+			<material name="Gray">
+				<color rgba="0.3 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+		</collision>
+	</link>
+
+	<link name="leftshuttle">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1" />
+			</geometry>
+			<material name="RedGray">
+				<color rgba="0.6 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="leftleg">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+			<material name="Gray">
+				<color rgba="0.3 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+		</collision>
+	</link>
+
+	<link name="leftleftshuttle">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1 0.1 0.1" />
+			</geometry>
+			<material name="RedGray">
+				<color rgba="0.6 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+	</link>
+
+	<link name="leftleftleg">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+			<material name="Gray">
+				<color rgba="0.3 0.3 0.3 1.0" />
+			</material>
+		</visual>
+		<inertial>
+			<mass value="1" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<collision>
+			<geometry>
+				<box size="0.1016 0.1016 0.7112" />
+			</geometry>
+		</collision>
+	</link>
+
+
+	<!-- * * * Joint Definitions * * * -->
+
+	<joint name="rightrightshuttle" type="continuous">
+		<parent link="spine" />
+		<child link="rightrightshuttle" />
+		<origin xyz="0 -0.1674 0" rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+		<limit effort="10000" velocity="1" />
+	</joint>
+
+	<joint name="rightshuttle" type="continuous">
+		<parent link="spine" />
+		<child link="rightshuttle" />
+		<origin xyz="0 -0.0558 0" rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+		<limit effort="10000" velocity="1" />
+	</joint>
+
+	<joint name="leftshuttle" type="continuous">
+		<parent link="spine" />
+		<child link="leftshuttle" />
+		<origin xyz="0 0.0558 0" rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+		<limit effort="10000" velocity="1" />
+	</joint>
+
+	<joint name="leftleftshuttle" type="continuous">
+		<parent link="spine" />
+		<child link="leftleftshuttle" />
+		<origin xyz="0 0.1674 0" rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+		<limit effort="10000" velocity="1" />
+	</joint>
+
+
+	<joint name="rightrightleg" type="prismatic">
+		<parent link="rightrightshuttle" />
+		<child link="rightrightleg" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.3056" upper="0.3056" effort="30" velocity="1" />
+	</joint>
+
+	<joint name="rightleg" type="prismatic">
+		<parent link="rightshuttle" />
+		<child link="rightleg" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.3056" upper="0.3056" effort="30" velocity="1" />
+	</joint>
+
+	<joint name="leftleftleg" type="prismatic">
+		<parent link="leftleftshuttle" />
+		<child link="leftleftleg" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.3056" upper="0.3056" effort="30" velocity="1" />
+	</joint>
+
+	<joint name="leftleg" type="prismatic">
+		<parent link="leftshuttle" />
+		<child link="leftleg" />
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.3056" upper="0.3056" effort="30" velocity="1" />
+	</joint>
+
+</robot>
